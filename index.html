@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Игра со словами</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(to right, #f8b195, #f67280);
+      color: #fff;
+      text-align: center;
+      padding: 50px;
+    }
+    .game-box {
+      background-color: #ffffff33;
+      padding: 40px;
+      border-radius: 25px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      display: inline-block;
+    }
+    .word {
+      font-size: 48px;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 24px;
+      border-radius: 10px;
+      border: none;
+      width: 300px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 24px;
+      border: none;
+      border-radius: 10px;
+      background-color: #355c7d;
+      color: #fff;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .message {
+      margin-top: 20px;
+      font-size: 28px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-box">
+    <div class="word" id="word"></div>
+    <input type="text" id="inputWord" placeholder="Введи слово">
+    <br>
+    <button id="checkButton" onclick="checkWord()">Проверить</button>
+    <button id="restartButton" onclick="startNewRound()" style="display: none;">Начать заново</button>
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    const allWords = [
+      "кот", "дом", "мама", "солнце", "яблоко",
+      "птица", "машина", "река", "облако", "друг",
+      "игрушка", "письмо", "собака", "груша", "картина",
+      "корабль", "вертолёт", "динозавр", "шоколад", "книга",
+      "компьютер", "лампа", "стол", "стул", "карандаш",
+      "тетрадь", "учитель", "музыка", "звезда", "планета",
+      "волшебство", "лестница", "телескоп", "мороженое", "фотография",
+      "телевизор", "карман", "колесо", "зеркало", "глобус",
+      "океан", "автобус", "поезд", "пещера", "инопланетянин",
+      "художник", "лошадь", "праздник", "запах", "радость"
+    ];
+
+    let currentRoundWords = [];
+    let currentIndex = 0;
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function startNewRound() {
+      shuffle(allWords);
+      currentRoundWords = allWords.slice(0, 5);
+      currentIndex = 0;
+      document.getElementById("inputWord").style.display = "inline-block";
+      document.getElementById("checkButton").style.display = "inline-block";
+      document.getElementById("restartButton").style.display = "none";
+      showWord();
+    }
+
+    function showWord() {
+      document.getElementById("word").textContent = currentRoundWords[currentIndex];
+      document.getElementById("inputWord").value = "";
+      document.getElementById("message").textContent = "";
+    }
+
+    function checkWord() {
+      const userWord = document.getElementById("inputWord").value.trim();
+      const correctWord = currentRoundWords[currentIndex];
+      if (userWord.toLowerCase() === correctWord.toLowerCase()) {
+        currentIndex++;
+        if (currentIndex < currentRoundWords.length) {
+          showWord();
+        } else {
+          document.getElementById("word").textContent = "Молодец! Раунд пройден!";
+          document.getElementById("inputWord").style.display = "none";
+          document.getElementById("checkButton").style.display = "none";
+          document.getElementById("restartButton").style.display = "inline-block";
+        }
+      } else {
+        document.getElementById("message").textContent = "Попробуй ещё раз!";
+      }
+    }
+
+    startNewRound();
+  </script>
+</body>
+</html>
